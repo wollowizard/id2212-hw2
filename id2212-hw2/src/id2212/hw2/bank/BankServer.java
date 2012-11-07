@@ -2,16 +2,16 @@ package id2212.hw2.bank;
 
 import java.rmi.registry.LocateRegistry;
 
-public class Server {    
+public class BankServer {    
 	private static final String USAGE = "java bankrmi.Server <bank_rmi_url>";
-	private static final String BANK = "Nordea";
+	private static final String BANK = "bankia";
 
-	public Server(String bankName) {
+	public BankServer(String bankName) {
 		try {
 			Bank bankobj = new BankImpl(bankName);
 			// Register the newly created object at rmiregistry.
                         LocateRegistry.createRegistry(1099); 
-			java.rmi.Naming.rebind(bankName, bankobj);
+			java.rmi.Naming.rebind("rmi://localhost/"+bankName, bankobj);
 			System.out.println(bankobj + " is ready.");
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -31,6 +31,6 @@ public class Server {
 			bankName = BANK;
 		}
 
-		new Server(bankName);
+		new BankServer(bankName);
 	}
 }

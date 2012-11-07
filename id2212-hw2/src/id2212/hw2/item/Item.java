@@ -4,11 +4,13 @@
  */
 package id2212.hw2.item;
 
+import java.io.Serializable;
+
 /**
  *
  * @author Marcel
  */
-public class Item {
+public class Item implements Serializable {
     
     public int id;
     public String name;

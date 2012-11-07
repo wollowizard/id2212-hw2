@@ -21,7 +21,7 @@ import java.util.logging.Logger;
  *
  * @author Marcel
  */
-public class ServerImpl extends UnicastRemoteObject implements Server  {
+public class MarketPlaceImpl extends UnicastRemoteObject implements MarketPlace  {
 
     private String servName;
     private String bankName;
@@ -30,12 +30,12 @@ public class ServerImpl extends UnicastRemoteObject implements Server  {
     private Map<Item, String> listItems = new  ConcurrentHashMap<Item, String>();
     
     
-    public ServerImpl(String sname, String bname) throws RemoteException {
+    public MarketPlaceImpl(String sname, String bname) throws RemoteException {
         super();
         this.servName = sname;
         this.bankName = bname;
         try {
-            objBank = (Bank)Naming.lookup(this.bankName);
+            objBank = (Bank)Naming.lookup("rmi://localhost/"+this.bankName);
         } catch (Exception e) {
             System.out.println("The runtime failed: " + e.getMessage());
             System.exit(0);
@@ -48,7 +48,7 @@ public class ServerImpl extends UnicastRemoteObject implements Server  {
         try {
             listAccounts.put(name, this.objBank.newAccount(name));
         } catch (RejectedException ex) {
-            Logger.getLogger(ServerImpl.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(MarketPlaceImpl.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -83,7 +83,7 @@ public class ServerImpl extends UnicastRemoteObject implements Server  {
             listItems.remove(it);
         } catch (RejectedException ex) {
             System.out.println("not engouht money");
-            Logger.getLogger(ServerImpl.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(MarketPlaceImpl.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 

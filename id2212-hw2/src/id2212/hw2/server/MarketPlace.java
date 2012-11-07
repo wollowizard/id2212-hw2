@@ -13,7 +13,7 @@ import java.util.ArrayList;
  *
  * @author Marcel
  */
-public interface Server extends Remote {
+public interface MarketPlace extends Remote {
     
     public void registerClient(String name) throws RemoteException;
     public void unregisterClient(String name) throws RemoteException;
