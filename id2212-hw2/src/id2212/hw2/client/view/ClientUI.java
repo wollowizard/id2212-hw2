@@ -28,6 +28,8 @@ public class ClientUI extends javax.swing.JFrame {
     private static final String BUY_FAIL = "Not bought, something happend";
     private static final String SELL_DONE = "You put the item to sell";
     private static final String SELL_FAIL = "Selled not done, something happend";
+    private static final String WISH_DONE = "You put the item to sell";
+    private static final String WISH_FAIL = "Selled not done, something happend";
     //private static final String CONNECTED = "Connected";
     
     private DefaultListModel listModel=new DefaultListModel();
@@ -106,6 +108,11 @@ public class ClientUI extends javax.swing.JFrame {
         });
 
         jButton5.setText("Wish");
+        jButton5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton5ActionPerformed(evt);
+            }
+        });
 
         SeeListButton.setText("See list");
         SeeListButton.addActionListener(new java.awt.event.ActionListener() {
@@ -291,6 +298,22 @@ public class ClientUI extends javax.swing.JFrame {
             Logger.getLogger(ClientUI.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_jButton3ActionPerformed
+
+    //Wish button
+    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
+        // TODO add your handling code here:
+        if (itemName.getText().isEmpty() || itemPrice.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Fill the fields Item Name and Item Price first!");
+        }
+       Item it = new Item(itemName.getText(), Float.parseFloat(itemPrice.getText()),null);
+        try {
+            client.servObj.wishItem(it, client);
+            infoPannel.setText(WISH_DONE);
+        } catch (RemoteException ex) {
+            infoPannel.setText(WISH_FAIL);
+            Logger.getLogger(ClientUI.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_jButton5ActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton SeeListButton;
