@@ -7,6 +7,7 @@ package id2212.hw2.server;
 import id2212.hw2.bank.Account;
 import id2212.hw2.bank.Bank;
 import id2212.hw2.bank.RejectedException;
+import id2212.hw2.client.ClientImpl;
 import id2212.hw2.item.Item;
 import java.rmi.Naming;
 import java.rmi.RemoteException;
@@ -69,8 +70,10 @@ public class MarketPlaceImpl extends UnicastRemoteObject implements MarketPlace 
     }
 
     @Override
-    public void sellItem(Item it, String name) throws RemoteException {
+    public void sellItem(Item it, String name, ClientImpl c) throws RemoteException {
+        it.seller=c;
         listItems.put(it, name);
+        
     }
 
     @Override
@@ -80,7 +83,10 @@ public class MarketPlaceImpl extends UnicastRemoteObject implements MarketPlace 
         try {
             buyAcc.withdraw(it.price);
             sellAcc.deposit(it.price);
+            it.seller.notifyClient();
+            
             listItems.remove(it);
+            
         } catch (RejectedException ex) {
             System.out.println("not engouht money");
             Logger.getLogger(MarketPlaceImpl.class.getName()).log(Level.SEVERE, null, ex);
@@ -97,8 +103,9 @@ public class MarketPlaceImpl extends UnicastRemoteObject implements MarketPlace 
     }
 
     @Override
-    public void wishItem(Item it, String name) throws RemoteException {
-        
+    public void wishItem(Item it, ClientImpl c) throws RemoteException {
+        c.wishedItems.add(it);
+                
     }
     
 }

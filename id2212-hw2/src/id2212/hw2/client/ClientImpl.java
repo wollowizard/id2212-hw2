@@ -4,10 +4,12 @@
  */
 package id2212.hw2.client;
 
+import id2212.hw2.item.Item;
 import id2212.hw2.server.MarketPlace;
 import java.rmi.Naming;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
+import java.util.ArrayList;
 
 /**
  *
@@ -18,6 +20,10 @@ public class ClientImpl extends UnicastRemoteObject implements Client  {
     private String clientName;
     public MarketPlace servObj;
     private String servName;
+    
+    public ArrayList<Item> wishedItems=new ArrayList<>();
+      
+    
     
     public ClientImpl(String name, String sname) throws RemoteException {
         this.clientName = name;
@@ -37,6 +43,8 @@ public class ClientImpl extends UnicastRemoteObject implements Client  {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
+    
+    
     
 }
 
