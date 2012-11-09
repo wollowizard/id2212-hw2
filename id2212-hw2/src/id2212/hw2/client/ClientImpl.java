@@ -21,7 +21,7 @@ public class ClientImpl extends UnicastRemoteObject implements Client  {
     public MarketPlace servObj;
     private String servName;
     
-    public ArrayList<Item> wishedItems=new ArrayList<>();
+    private ArrayList<Item> wishedItems=new ArrayList<>();
       
     
     
@@ -38,9 +38,29 @@ public class ClientImpl extends UnicastRemoteObject implements Client  {
         System.out.println("Connected to bank: " + this.servName);
     }
     
+    public void addItemToWished(Item it)throws RemoteException{
+        this.wishedItems.add(it);
+    }
+    
+    
+    
     @Override
-    public void notifyClient() throws RemoteException {
+     public void notifyItemSold(Item it) throws RemoteException {
         throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    public void notifyWishedAvailable(Item it)throws RemoteException {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public void removeItemFromWished(Item it) throws RemoteException {
+        this.wishedItems.remove(it);
+    }
+    
+    @Override
+    public ArrayList<Item> getWishedItems() throws RemoteException{
+        return this.wishedItems;
     }
 
     

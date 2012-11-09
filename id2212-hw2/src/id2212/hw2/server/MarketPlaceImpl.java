@@ -7,7 +7,7 @@ package id2212.hw2.server;
 import id2212.hw2.bank.Account;
 import id2212.hw2.bank.Bank;
 import id2212.hw2.bank.RejectedException;
-import id2212.hw2.client.ClientImpl;
+import id2212.hw2.client.Client;
 import id2212.hw2.item.Item;
 import java.rmi.Naming;
 import java.rmi.RemoteException;
@@ -70,20 +70,23 @@ public class MarketPlaceImpl extends UnicastRemoteObject implements MarketPlace 
     }
 
     @Override
-    public void sellItem(Item it, String name, ClientImpl c) throws RemoteException {
+    public void sellItem(Item it, String name, Client c) throws RemoteException {
         it.seller=c;
         listItems.put(it, name);
+        
+        this.checkForWishedItems(c, it);
         
     }
 
     @Override
-    public void buyItem(Item it, String name) throws RemoteException {
+    public void buyItem(Item it, String name, Client c) throws RemoteException {
         Account buyAcc = listAccounts.get(name);
         Account sellAcc = listAccounts.get(listItems.get(it));
         try {
             buyAcc.withdraw(it.price);
             sellAcc.deposit(it.price);
-            it.seller.notifyClient();
+            it.seller.notifyItemSold(it);
+            c.removeItemFromWished(it);
             
             listItems.remove(it);
             
@@ -95,17 +98,29 @@ public class MarketPlaceImpl extends UnicastRemoteObject implements MarketPlace 
 
     @Override
     public ArrayList<Item> inspectItem() throws RemoteException {
-        ArrayList<Item> tmp = new ArrayList<Item>();
+        ArrayList<Item> tmp = new ArrayList<>();
         for (Map.Entry<Item, String> entry: listItems.entrySet()) {
             tmp.add(entry.getKey());
         }
         return tmp;
     }
 
+    
+    
     @Override
-    public void wishItem(Item it, ClientImpl c) throws RemoteException {
-        c.wishedItems.add(it);
-                
+    public void wishItem(Item it, Client c) throws RemoteException {
+        c.addItemToWished(it);
+    }
+    
+    private void checkForWishedItems(Client c, Item it) throws RemoteException {
+        ArrayList <Item>wishedItems=c.getWishedItems();
+        
+        for(Item i : wishedItems){
+            if(i.equals(it)){
+                c.notifyWishedAvailable(it);
+                break;
+            }
+        }
     }
     
 }
