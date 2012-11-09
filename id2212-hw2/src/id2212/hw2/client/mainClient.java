@@ -44,6 +44,7 @@ public class mainClient {
         Item itm = new Item("camera",3000);
         c.servObj.sellItem(itm, clientName, c);
         
+        
         System.out.println(c.servObj.inspectItem().get(0).name);
     }
 }
