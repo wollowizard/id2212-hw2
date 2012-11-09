@@ -247,11 +247,15 @@ public class ClientUI extends javax.swing.JFrame {
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
         // TODO add your handling code here:
-        if (itemName.getText().isEmpty() || itemPrice.getText().isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Fill the fields Item Name and Item Price first!");
+        int index = list.getSelectedIndex();
+        if(index==-1){
+            return;
         }
+        Item it=items.get(index);
+        
         try {
-            client.servObj.buyItem(0, client.clientName, client);
+            client.servObj.buyItem(it.id, client.clientName, client);
+            
             infoPannel.setText(BUY_DONE);
         } catch (RemoteException ex) {
             infoPannel.setText(BUY_FAIL);
@@ -267,7 +271,7 @@ public class ClientUI extends javax.swing.JFrame {
         try {
             items = client.servObj.inspectItem();
             for(Item i : items){
-                listModel.addElement(i.name + " " + i.price + "€");
+                listModel.addElement(i.id + " " + i.name + " " + i.price + "€");
                                 
             }
         } catch (RemoteException ex) {

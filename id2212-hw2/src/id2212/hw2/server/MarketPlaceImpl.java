@@ -98,7 +98,14 @@ public class MarketPlaceImpl extends UnicastRemoteObject implements MarketPlace 
             sellAcc.deposit(it.price);
             it.seller.notifyItemSold(it);
             c.removeItemFromWished(it);
-            listItems.remove(it);
+            
+            for(Map.Entry<Item, String> entry: listItems.entrySet()){
+                if(entry.getKey().id==it.id){
+                    listItems.remove(entry.getKey());
+                }
+            }
+            
+            
         } catch (RejectedException ex) {
             System.out.println("not engouht money");
             Logger.getLogger(MarketPlaceImpl.class.getName()).log(Level.SEVERE, null, ex);
