@@ -9,6 +9,7 @@ import id2212.hw2.item.Item;
 import java.rmi.RemoteException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -20,6 +21,10 @@ public class ClientUI extends javax.swing.JFrame {
     
     private static final String CONNECTED = "Connected";
     private static final String DISCONNECTED = "Disconnected";
+    private static final String BUY_DONE = "You bought it";
+    private static final String BUY_FAIL = "Not bought, something happend";
+    private static final String SELL_DONE = "You put the item to sell";
+    private static final String SELL_FAIL = "Selled not done, something happend";
     //private static final String CONNECTED = "Connected";
     
     /**
@@ -77,6 +82,11 @@ public class ClientUI extends javax.swing.JFrame {
         });
 
         jButton3.setText("Sell");
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
 
         jButton4.setText("Buy");
         jButton4.addActionListener(new java.awt.event.ActionListener() {
@@ -223,15 +233,31 @@ public class ClientUI extends javax.swing.JFrame {
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
         // TODO add your handling code here:
         if (itemName.getText().isEmpty() || itemPrice.getText().isEmpty()) {
-            //throw error
+            JOptionPane.showMessageDialog(this, "Fill the fields Item Name and Item Price first!");
         }
-        Item it = new Item(itemName.getText(), Float.parseFloat(itemPrice.getText()));
         try {
-            client.servObj.buyItem(it, client.clientName, client);
+            client.servObj.buyItem(0, client.clientName, client);
+            infoPannel.setText(BUY_DONE);
         } catch (RemoteException ex) {
+            infoPannel.setText(BUY_FAIL);
             Logger.getLogger(ClientUI.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_jButton4ActionPerformed
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        // TODO add your handling code here:
+        if (itemName.getText().isEmpty() || itemPrice.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Fill the fields Item Name and Item Price first!");
+        }
+        Item it = new Item(itemName.getText(), Float.parseFloat(itemPrice.getText()),client);
+        try {
+            client.servObj.sellItem(it, client.clientName, client);
+            infoPannel.setText(SELL_DONE);
+        } catch (RemoteException ex) {
+            infoPannel.setText(SELL_FAIL);
+            Logger.getLogger(ClientUI.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_jButton3ActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel infoPannel;

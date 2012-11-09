@@ -19,7 +19,7 @@ public interface MarketPlace extends Remote {
     public void registerClient(String name) throws RemoteException;
     public void unregisterClient(String name) throws RemoteException;
     public void sellItem(Item it, String name, Client c) throws RemoteException;
-    public void buyItem(Item it, String name, Client c) throws RemoteException;
+    public void buyItem(Integer iitemId, String name, Client c) throws RemoteException;
     public ArrayList<Item> inspectItem() throws RemoteException;
     public void wishItem(Item it, Client c) throws RemoteException;
     

@@ -19,10 +19,11 @@ public class Item implements Serializable {
     public Client seller;
     public static int counter = 0;
     
-    public Item(String n, float p) {
+    public Item(String n, float p, Client s) {
         
         this.name = n;
         this.price= p;
+        this.seller=s;
         this.id = counter;
         counter++;
     }

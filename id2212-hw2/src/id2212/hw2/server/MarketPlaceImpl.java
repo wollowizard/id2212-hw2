@@ -77,19 +77,28 @@ public class MarketPlaceImpl extends UnicastRemoteObject implements MarketPlace 
         this.checkForWishedItems(c, it);
         
     }
+    
+    private Item findItemById(int id) {
+        for (Map.Entry<Item, String> entry: listItems.entrySet()) {
+            if (entry.getKey().id == id) {
+                return entry.getKey();
+            }
+        }
+        return null;
+    }
 
     @Override
-    public void buyItem(Item it, String name, Client c) throws RemoteException {
+    public void buyItem(Integer itemId, String name, Client c) throws RemoteException {
         Account buyAcc = listAccounts.get(name);
-        Account sellAcc = listAccounts.get(listItems.get(it));
+        Item it = findItemById(itemId);
+        if (it==null) throw new RemoteException("no item found");
+        Account sellAcc = listAccounts.get(it.seller);
         try {
             buyAcc.withdraw(it.price);
             sellAcc.deposit(it.price);
             it.seller.notifyItemSold(it);
             c.removeItemFromWished(it);
-            
             listItems.remove(it);
-            
         } catch (RejectedException ex) {
             System.out.println("not engouht money");
             Logger.getLogger(MarketPlaceImpl.class.getName()).log(Level.SEVERE, null, ex);
