@@ -12,9 +12,9 @@ import java.rmi.registry.LocateRegistry;
  */
 public class MarketPlaceServer {
 
-    private static final String bankName = "bankia";
     
-    public MarketPlaceServer(String servName) {
+    
+    public MarketPlaceServer(String servName, String bankName) {
         try {
             MarketPlace mpObj = new MarketPlaceImpl(servName, bankName);
             // Register the newly created object at rmiregistry.
@@ -27,18 +27,21 @@ public class MarketPlaceServer {
     }
     
     public static void main(String[] args) {
-		if (args.length > 1 || (args.length > 0 && args[0].equalsIgnoreCase("-h"))) {
+		if (args.length > 2 || (args.length > 0 && args[0].equalsIgnoreCase("-h"))) {
 			System.out.println(":)");
 			System.exit(1);
 		}
 
 		String servName = null;
-		if (args.length > 0) {
+                String bankName = null;
+		if (args.length == 2) {
 			servName = args[0];
+                        bankName = args[1];
 		} else {
 			servName = "EBAY";
+                        bankName = "bankia";
 		}
 
-		new MarketPlaceServer(servName);
+		new MarketPlaceServer(servName,bankName);
 	}
 }

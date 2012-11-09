@@ -227,7 +227,7 @@ public class ClientUI extends javax.swing.JFrame {
         }
         Item it = new Item(itemName.getText(), Float.parseFloat(itemPrice.getText()));
         try {
-            client.servObj.buyItem(it, client.clientName);
+            client.servObj.buyItem(it, client.clientName, client);
         } catch (RemoteException ex) {
             Logger.getLogger(ClientUI.class.getName()).log(Level.SEVERE, null, ex);
         }
