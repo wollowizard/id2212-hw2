@@ -17,7 +17,7 @@ import java.util.ArrayList;
  */
 public class ClientImpl extends UnicastRemoteObject implements Client  {
 
-    private String clientName;
+    public String clientName;
     public MarketPlace servObj;
     private String servName;
     
