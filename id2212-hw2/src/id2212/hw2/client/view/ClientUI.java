@@ -7,9 +7,12 @@ package id2212.hw2.client.view;
 import id2212.hw2.client.ClientImpl;
 import id2212.hw2.item.Item;
 import java.rmi.RemoteException;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
+import javax.swing.DefaultListModel;
+import javax.swing.ListSelectionModel;
 
 /**
  *
@@ -27,6 +30,10 @@ public class ClientUI extends javax.swing.JFrame {
     private static final String SELL_FAIL = "Selled not done, something happend";
     //private static final String CONNECTED = "Connected";
     
+    private DefaultListModel listModel=new DefaultListModel();
+    ArrayList<Item> items=new ArrayList<>();
+    
+    
     /**
      * Creates new form ClientUI
      */
@@ -34,6 +41,9 @@ public class ClientUI extends javax.swing.JFrame {
         initComponents();
         this.client = c;
         this.setTitle("EBAY");
+        list.setModel(listModel);
+        list.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
+                
     }
 
     /**
@@ -52,7 +62,7 @@ public class ClientUI extends javax.swing.JFrame {
         jButton3 = new javax.swing.JButton();
         jButton4 = new javax.swing.JButton();
         jButton5 = new javax.swing.JButton();
-        jButton6 = new javax.swing.JButton();
+        SeeListButton = new javax.swing.JButton();
         infoPannel = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
         itemName = new javax.swing.JTextField();
@@ -62,7 +72,7 @@ public class ClientUI extends javax.swing.JFrame {
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jList1 = new javax.swing.JList();
+        list = new javax.swing.JList();
         jMenuBar1 = new javax.swing.JMenuBar();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -97,7 +107,12 @@ public class ClientUI extends javax.swing.JFrame {
 
         jButton5.setText("Wish");
 
-        jButton6.setText("See list");
+        SeeListButton.setText("See list");
+        SeeListButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                SeeListButtonActionPerformed(evt);
+            }
+        });
 
         infoPannel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         infoPannel.setText("Disconnected");
@@ -112,7 +127,7 @@ public class ClientUI extends javax.swing.JFrame {
             .addComponent(jButton3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(jButton4, javax.swing.GroupLayout.DEFAULT_SIZE, 100, Short.MAX_VALUE)
             .addComponent(jButton5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(jButton6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(SeeListButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(infoPannel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         jPanel1Layout.setVerticalGroup(
@@ -131,7 +146,7 @@ public class ClientUI extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jButton5)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButton6)
+                .addComponent(SeeListButton)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(infoPannel))
         );
@@ -144,14 +159,14 @@ public class ClientUI extends javax.swing.JFrame {
 
         jLabel4.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         jLabel4.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel4.setText("Advailable items");
+        jLabel4.setText("Available items");
 
-        jList1.setModel(new javax.swing.AbstractListModel() {
+        list.setModel(new javax.swing.AbstractListModel() {
             String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
             public int getSize() { return strings.length; }
             public Object getElementAt(int i) { return strings[i]; }
         });
-        jScrollPane1.setViewportView(jList1);
+        jScrollPane1.setViewportView(list);
 
         setJMenuBar(jMenuBar1);
 
@@ -180,7 +195,7 @@ public class ClientUI extends javax.swing.JFrame {
                                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                         .addComponent(itemName)
                                         .addComponent(itemPrice, javax.swing.GroupLayout.DEFAULT_SIZE, 88, Short.MAX_VALUE)))))
-                        .addGap(0, 136, Short.MAX_VALUE)))
+                        .addGap(0, 93, Short.MAX_VALUE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
@@ -200,7 +215,7 @@ public class ClientUI extends javax.swing.JFrame {
                 .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 16, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 44, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel3))
@@ -244,6 +259,24 @@ public class ClientUI extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_jButton4ActionPerformed
 
+
+        
+    private void SeeListButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SeeListButtonActionPerformed
+        listModel.clear();
+        
+        try {
+            items = client.servObj.inspectItem();
+            for(Item i : items){
+                listModel.addElement(i.name + " " + i.price + "€");
+                                
+            }
+        } catch (RemoteException ex) {
+            Logger.getLogger(ClientUI.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        
+    }//GEN-LAST:event_SeeListButtonActionPerformed
+
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         // TODO add your handling code here:
         if (itemName.getText().isEmpty() || itemPrice.getText().isEmpty()) {
@@ -260,6 +293,7 @@ public class ClientUI extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton3ActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton SeeListButton;
     private javax.swing.JLabel infoPannel;
     private javax.swing.JTextField itemName;
     private javax.swing.JTextField itemPrice;
@@ -268,16 +302,15 @@ public class ClientUI extends javax.swing.JFrame {
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
     private javax.swing.JButton jButton5;
-    private javax.swing.JButton jButton6;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
-    private javax.swing.JList jList1;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JTextField jTextField3;
+    private javax.swing.JList list;
     // End of variables declaration//GEN-END:variables
 }
