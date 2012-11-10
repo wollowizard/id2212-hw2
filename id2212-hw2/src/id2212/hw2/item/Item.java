@@ -13,11 +13,11 @@ import java.io.Serializable;
  */
 public class Item implements Serializable {
     
-    public int id;
-    public String name;
-    public float price;
-    public Client seller;
-    public static int counter = 0;
+    private int id;
+    private String name;
+    private float price;
+    private Client seller;
+    private static int counter = 0;
     
     public Item(String n, float p, Client s) {
         
@@ -25,6 +25,27 @@ public class Item implements Serializable {
         this.price= p;
         this.seller=s;
         this.id = counter;
+        System.out.println("Item created: " + id);
         counter++;
+    }
+
+    public void setSeller(Client c) {
+        this.seller=c;
+    }
+
+    public int getId() {
+        return this.id;
+    }
+
+    public Client getSeller() {
+        return this.seller;
+    }
+
+    public float getPrice() {
+        return this.price;
+    }
+
+    public String getName() {
+        return this.name;
     }
 }

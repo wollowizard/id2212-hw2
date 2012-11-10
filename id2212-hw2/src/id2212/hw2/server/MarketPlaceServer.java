@@ -4,8 +4,6 @@
  */
 package id2212.hw2.server;
 
-import java.rmi.registry.LocateRegistry;
-
 /**
  *
  * @author Marcel

@@ -18,8 +18,9 @@ public interface Client extends Remote {
 
     public void notifyItemSold(Item it)throws RemoteException;
 
-    public void addItemToWished(Item it)throws RemoteException;
-    public void removeItemFromWished(Item it) throws RemoteException;
+    
+   public String getName() throws RemoteException;
 
-    public ArrayList<Item> getWishedItems() throws RemoteException;
+    public void notifyWishDisappeared(Item it)throws RemoteException;
+    
 }

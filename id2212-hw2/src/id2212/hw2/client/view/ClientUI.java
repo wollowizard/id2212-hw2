@@ -4,14 +4,16 @@
  */
 package id2212.hw2.client.view;
 
+import id2212.hw2.bank.RejectedException;
 import id2212.hw2.client.ClientImpl;
 import id2212.hw2.item.Item;
+import java.awt.Component;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.JOptionPane;
 import javax.swing.DefaultListModel;
+import javax.swing.JOptionPane;
 import javax.swing.ListSelectionModel;
 
 /**
@@ -19,33 +21,47 @@ import javax.swing.ListSelectionModel;
  * @author Marcel
  */
 public class ClientUI extends javax.swing.JFrame {
-
-    private ClientImpl client;
     
+    private ClientImpl client;
     private static final String CONNECTED = "Connected";
     private static final String DISCONNECTED = "Disconnected";
     private static final String BUY_DONE = "You bought it";
     private static final String BUY_FAIL = "Not bought, something happend";
     private static final String SELL_DONE = "You put the item to sell";
     private static final String SELL_FAIL = "Selled not done, something happend";
-    private static final String WISH_DONE = "You put the item to sell";
-    private static final String WISH_FAIL = "Selled not done, something happend";
+    private static final String WISH_DONE = "You wished the item";
+    private static final String WISH_FAIL = "Wish not done, something happend";
+    private static final String SOLD = "Your item was sold";
+    private static final String WISH_AVAILABLE = "A wish of yours is now available";
     //private static final String CONNECTED = "Connected";
-    
-    private DefaultListModel listModel=new DefaultListModel();
-    ArrayList<Item> items=new ArrayList<>();
-    
-    
+    private DefaultListModel listModel = new DefaultListModel();
+    private DefaultListModel wishesModel = new DefaultListModel();
+    private DefaultListModel soldModel = new DefaultListModel();
+    private Integer notificationCounter = 0;
+    ArrayList<Item> items = new ArrayList<>();
+    private ArrayList<Item> wishesAvailable=new ArrayList<>();;
+
     /**
      * Creates new form ClientUI
      */
     public ClientUI(ClientImpl c) {
         initComponents();
+        
         this.client = c;
         this.setTitle("EBAY");
         list.setModel(listModel);
         list.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
-                
+        disconnectButton.setEnabled(false);
+        Component[] cmp = this.itemPanel.getComponents();
+        for (Component comp : cmp) {
+            comp.setEnabled(false);
+        }
+        wishesList.setModel(wishesModel);
+        soldList.setModel(soldModel);
+        wishesModel.clear();
+        soldModel.clear();
+        notificationLabelMouseClicked(null);
+        
     }
 
     /**
@@ -57,112 +73,44 @@ public class ClientUI extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jPanel1 = new javax.swing.JPanel();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
-        jSeparator1 = new javax.swing.JSeparator();
-        jButton3 = new javax.swing.JButton();
-        jButton4 = new javax.swing.JButton();
-        jButton5 = new javax.swing.JButton();
-        SeeListButton = new javax.swing.JButton();
-        infoPannel = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
         itemName = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
         itemPrice = new javax.swing.JTextField();
-        jTextField3 = new javax.swing.JTextField();
-        jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         list = new javax.swing.JList();
+        infoPannel = new javax.swing.JLabel();
+        itemPanel = new javax.swing.JPanel();
+        sellButton = new javax.swing.JButton();
+        buyButton = new javax.swing.JButton();
+        wishButton = new javax.swing.JButton();
+        seeListButton = new javax.swing.JButton();
+        nameTextField = new javax.swing.JTextField();
+        jLabel3 = new javax.swing.JLabel();
+        connectButton = new javax.swing.JButton();
+        disconnectButton = new javax.swing.JButton();
+        notificationLabel = new javax.swing.JLabel();
+        notificationTabbedPane = new javax.swing.JTabbedPane();
+        jPanel1 = new javax.swing.JPanel();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        wishesList = new javax.swing.JList();
+        jPanel2 = new javax.swing.JPanel();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        soldList = new javax.swing.JList();
         jMenuBar1 = new javax.swing.JMenuBar();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jButton1.setText("Connect");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
-            }
-        });
-
-        jButton2.setText("Disconnect");
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
-            }
-        });
-
-        jButton3.setText("Sell");
-        jButton3.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton3ActionPerformed(evt);
-            }
-        });
-
-        jButton4.setText("Buy");
-        jButton4.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton4ActionPerformed(evt);
-            }
-        });
-
-        jButton5.setText("Wish");
-        jButton5.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton5ActionPerformed(evt);
-            }
-        });
-
-        SeeListButton.setText("See list");
-        SeeListButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                SeeListButtonActionPerformed(evt);
-            }
-        });
-
-        infoPannel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        infoPannel.setText("Disconnected");
-
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(jSeparator1, javax.swing.GroupLayout.Alignment.TRAILING)
-            .addComponent(jButton3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(jButton4, javax.swing.GroupLayout.DEFAULT_SIZE, 100, Short.MAX_VALUE)
-            .addComponent(jButton5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(SeeListButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(infoPannel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-        );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jButton1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButton2)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButton3)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButton4)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButton5)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(SeeListButton)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(infoPannel))
-        );
-
         jLabel1.setText("Item Name:");
 
-        jLabel2.setText("Item Price: ");
+        itemName.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                itemNameActionPerformed(evt);
+            }
+        });
 
-        jLabel3.setText("Credit:");
+        jLabel2.setText("Item Price: ");
 
         jLabel4.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         jLabel4.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -175,169 +123,405 @@ public class ClientUI extends javax.swing.JFrame {
         });
         jScrollPane1.setViewportView(list);
 
+        infoPannel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        infoPannel.setText("Disconnected");
+
+        sellButton.setText("Sell");
+        sellButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                sellButtonActionPerformed(evt);
+            }
+        });
+
+        buyButton.setText("Buy");
+        buyButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                buyButtonActionPerformed(evt);
+            }
+        });
+
+        wishButton.setText("Wish");
+        wishButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                wishButtonActionPerformed(evt);
+            }
+        });
+
+        seeListButton.setText("See list");
+        seeListButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                seeListButtonActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout itemPanelLayout = new javax.swing.GroupLayout(itemPanel);
+        itemPanel.setLayout(itemPanelLayout);
+        itemPanelLayout.setHorizontalGroup(
+            itemPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(buyButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(wishButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(seeListButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(sellButton, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
+        itemPanelLayout.setVerticalGroup(
+            itemPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(itemPanelLayout.createSequentialGroup()
+                .addComponent(sellButton)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(buyButton)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(wishButton)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 8, Short.MAX_VALUE)
+                .addComponent(seeListButton))
+        );
+
+        nameTextField.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                nameTextFieldActionPerformed(evt);
+            }
+        });
+
+        jLabel3.setText("Name:");
+
+        connectButton.setText("Connect");
+        connectButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                connectButtonActionPerformed(evt);
+            }
+        });
+
+        disconnectButton.setText("Disconnect");
+        disconnectButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                disconnectButtonActionPerformed(evt);
+            }
+        });
+
+        notificationLabel.setText("Notifications (0) >>");
+        notificationLabel.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                notificationLabelMouseClicked(evt);
+            }
+        });
+
+        wishesList.setModel(new javax.swing.AbstractListModel() {
+            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
+            public int getSize() { return strings.length; }
+            public Object getElementAt(int i) { return strings[i]; }
+        });
+        jScrollPane2.setViewportView(wishesList);
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 193, Short.MAX_VALUE)
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 217, Short.MAX_VALUE)
+        );
+
+        notificationTabbedPane.addTab("Wishes", jPanel1);
+
+        soldList.setModel(new javax.swing.AbstractListModel() {
+            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
+            public int getSize() { return strings.length; }
+            public Object getElementAt(int i) { return strings[i]; }
+        });
+        jScrollPane3.setViewportView(soldList);
+
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 193, Short.MAX_VALUE)
+        );
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jScrollPane3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 217, Short.MAX_VALUE)
+        );
+
+        notificationTabbedPane.addTab("Sold", jPanel2);
+
         setJMenuBar(jMenuBar1);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+            .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(jLabel3)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                .addComponent(jLabel4, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 148, Short.MAX_VALUE)
-                                .addGroup(layout.createSequentialGroup()
-                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                        .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                        .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                        .addComponent(itemName)
-                                        .addComponent(itemPrice, javax.swing.GroupLayout.DEFAULT_SIZE, 88, Short.MAX_VALUE)))))
-                        .addGap(0, 93, Short.MAX_VALUE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(itemPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, Short.MAX_VALUE)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(18, 18, 18)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(itemPrice, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(itemName, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addGap(11, 11, 11)
+                                        .addComponent(jLabel3)
+                                        .addGap(18, 18, 18)
+                                        .addComponent(nameTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(18, 18, 18)
+                                        .addComponent(connectButton)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(disconnectButton)))
+                                .addGap(0, 96, Short.MAX_VALUE)))
+                        .addGap(73, 73, 73)
+                        .addComponent(notificationTabbedPane, javax.swing.GroupLayout.PREFERRED_SIZE, 198, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(infoPannel, javax.swing.GroupLayout.PREFERRED_SIZE, 320, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(notificationLabel)
+                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
+                .addContainerGap(57, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(itemPrice, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel2))
+                        .addGap(70, 70, 70))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(notificationTabbedPane)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(nameTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabel3)
+                                    .addComponent(connectButton)
+                                    .addComponent(disconnectButton))
+                                .addGap(31, 31, 31)
+                                .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(itemPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                        .addComponent(jLabel1)
+                                        .addComponent(itemName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)))
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel1)
-                    .addComponent(itemName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel2)
-                    .addComponent(itemPrice, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 44, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel3))
-                .addContainerGap())
+                    .addComponent(infoPannel, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(notificationLabel))
+                .addContainerGap(63, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void connectButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_connectButtonActionPerformed
         try {
             // TODO add your handling code here:
+            client.gui = this;
+            client.clientName = nameTextField.getText();
             client.servObj.registerClient(client.clientName);
             infoPannel.setText(CONNECTED);
+            connectButton.setEnabled(false);
+            disconnectButton.setEnabled(true);
+            Component[] cmp = this.itemPanel.getComponents();
+            for (Component comp : cmp) {
+                comp.setEnabled(true);
+            }
+            this.seeListButton.doClick();
+            
+        } catch (RejectedException ex) {
+            this.infoPannel.setText(ex.getMessage());
         } catch (RemoteException ex) {
             Logger.getLogger(ClientUI.class.getName()).log(Level.SEVERE, null, ex);
         }
-    }//GEN-LAST:event_jButton1ActionPerformed
-
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        
+    }//GEN-LAST:event_connectButtonActionPerformed
+    
+    private void disconnectButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_disconnectButtonActionPerformed
         try {
             // TODO add your handling code here:
             client.servObj.unregisterClient(client.clientName);
             infoPannel.setText(DISCONNECTED);
+            connectButton.setEnabled(true);
+            disconnectButton.setEnabled(false);
+            Component[] cmp = this.itemPanel.getComponents();
+            for (Component comp : cmp) {
+                comp.setEnabled(false);
+            }
         } catch (RemoteException ex) {
             Logger.getLogger(ClientUI.class.getName()).log(Level.SEVERE, null, ex);
         }
-    }//GEN-LAST:event_jButton2ActionPerformed
-
-    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+    }//GEN-LAST:event_disconnectButtonActionPerformed
+    
+    private void buyButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buyButtonActionPerformed
         // TODO add your handling code here:
         int index = list.getSelectedIndex();
-        if(index==-1){
+        if (index == -1) {
             return;
         }
-        Item it=items.get(index);
+        Item it = items.get(index);
         
         try {
-            client.servObj.buyItem(it.id, client.clientName, client);
+            client.servObj.buyItem(it.getId(), client.clientName, client);
             
             infoPannel.setText(BUY_DONE);
-        } catch (RemoteException ex) {
-            infoPannel.setText(BUY_FAIL);
-            Logger.getLogger(ClientUI.class.getName()).log(Level.SEVERE, null, ex);
+            this.seeListButton.doClick();
+        } catch (RejectedException | RemoteException ex) {
+            infoPannel.setText(ex.getMessage());
         }
-    }//GEN-LAST:event_jButton4ActionPerformed
-
-
-        
-    private void SeeListButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SeeListButtonActionPerformed
+    }//GEN-LAST:event_buyButtonActionPerformed
+    
+    private void seeListButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_seeListButtonActionPerformed
         listModel.clear();
         
         try {
             items = client.servObj.inspectItem();
-            for(Item i : items){
-                listModel.addElement(i.id + " " + i.name + " " + i.price + "€");
-                                
+            for (Item i : items) {
+                listModel.addElement(i.getId() + " " + i.getName() + " " + i.getPrice() + "€");
+                
             }
         } catch (RemoteException ex) {
             Logger.getLogger(ClientUI.class.getName()).log(Level.SEVERE, null, ex);
         }
         
         
-    }//GEN-LAST:event_SeeListButtonActionPerformed
-
-    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+    }//GEN-LAST:event_seeListButtonActionPerformed
+    
+    private void sellButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sellButtonActionPerformed
         // TODO add your handling code here:
         if (itemName.getText().isEmpty() || itemPrice.getText().isEmpty()) {
             JOptionPane.showMessageDialog(this, "Fill the fields Item Name and Item Price first!");
         }
-        Item it = new Item(itemName.getText(), Float.parseFloat(itemPrice.getText()),client);
+        
         try {
+            
+            Item it = client.servObj.newItem(itemName.getText(), Float.parseFloat(itemPrice.getText()), client);
+            
+            
+            
             client.servObj.sellItem(it, client.clientName, client);
             infoPannel.setText(SELL_DONE);
+            this.seeListButton.doClick();
         } catch (RemoteException ex) {
             infoPannel.setText(SELL_FAIL);
             Logger.getLogger(ClientUI.class.getName()).log(Level.SEVERE, null, ex);
         }
-    }//GEN-LAST:event_jButton3ActionPerformed
+    }//GEN-LAST:event_sellButtonActionPerformed
 
     //Wish button
-    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
-        // TODO add your handling code here:
-        if (itemName.getText().isEmpty() || itemPrice.getText().isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Fill the fields Item Name and Item Price first!");
-        }
-       Item it = new Item(itemName.getText(), Float.parseFloat(itemPrice.getText()),null);
+    private void wishButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_wishButtonActionPerformed
         try {
+            // TODO add your handling code here:
+            if (itemName.getText().isEmpty() || itemPrice.getText().isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Fill the fields Item Name and Item Price first!");
+            }
+            Item it = new Item(itemName.getText(), Float.parseFloat(itemPrice.getText()), null);
+            
             client.servObj.wishItem(it, client);
+            
             infoPannel.setText(WISH_DONE);
         } catch (RemoteException ex) {
-            infoPannel.setText(WISH_FAIL);
             Logger.getLogger(ClientUI.class.getName()).log(Level.SEVERE, null, ex);
         }
-    }//GEN-LAST:event_jButton5ActionPerformed
-
+        
+    }//GEN-LAST:event_wishButtonActionPerformed
+    
+    public void yourItemWasSold(Item it) {
+        this.soldModel.addElement(it.getId() + " " + it.getName() + " " + it.getPrice() + "€");
+        notificationCounter++;
+        this.updateNotificationLabel();
+        this.seeListButton.doClick();
+    }
+    
+    private void nameTextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nameTextFieldActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_nameTextFieldActionPerformed
+    
+    private void itemNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemNameActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_itemNameActionPerformed
+    
+    private void notificationLabelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_notificationLabelMouseClicked
+        if (notificationTabbedPane.isVisible()) {
+            this.notificationTabbedPane.setVisible(false);
+        } else {
+            this.notificationTabbedPane.setVisible(true);
+        }
+        this.notificationCounter = 0;
+        this.updateNotificationLabel();
+        this.pack();
+    }//GEN-LAST:event_notificationLabelMouseClicked
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton SeeListButton;
+    private javax.swing.JButton buyButton;
+    private javax.swing.JButton connectButton;
+    private javax.swing.JButton disconnectButton;
     private javax.swing.JLabel infoPannel;
     private javax.swing.JTextField itemName;
+    private javax.swing.JPanel itemPanel;
     private javax.swing.JTextField itemPrice;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton4;
-    private javax.swing.JButton jButton5;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JSeparator jSeparator1;
-    private javax.swing.JTextField jTextField3;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JList list;
+    private javax.swing.JTextField nameTextField;
+    private javax.swing.JLabel notificationLabel;
+    private javax.swing.JTabbedPane notificationTabbedPane;
+    private javax.swing.JButton seeListButton;
+    private javax.swing.JButton sellButton;
+    private javax.swing.JList soldList;
+    private javax.swing.JButton wishButton;
+    private javax.swing.JList wishesList;
     // End of variables declaration//GEN-END:variables
+
+    public void whishAvailable(Item it) {
+        this.wishesAvailable.add(it);
+        this.wishesModel.clear();
+        for(Item i : wishesAvailable){
+            this.wishesModel.addElement(i.getId() + " " + i.getName() + " " + i.getPrice() + "€");
+        }
+        notificationCounter++;
+        this.updateNotificationLabel();
+        this.seeListButton.doClick();
+    }
+    
+    public void whishDisappeared(Item it) {
+        Item toremove=null;
+        for(Item i : this.wishesAvailable){
+            if(it.getId()==i.getId()){
+                toremove=i;
+            }
+        }
+        this.wishesAvailable.remove(toremove);
+        
+        this.wishesModel.clear();
+        for(Item i : wishesAvailable){
+            this.wishesModel.addElement(i.getId() + " " + i.getName() + " " + i.getPrice() + "€");
+        }
+    }
+    
+    private void updateNotificationLabel() {
+        this.notificationLabel.setText("Notifications (" + this.notificationCounter + ") >>");
+    }
+
+    
 }

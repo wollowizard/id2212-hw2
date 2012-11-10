@@ -4,6 +4,7 @@
  */
 package id2212.hw2.client;
 
+import id2212.hw2.client.view.ClientUI;
 import id2212.hw2.item.Item;
 import id2212.hw2.server.MarketPlace;
 import java.rmi.Naming;
@@ -15,13 +16,14 @@ import java.util.ArrayList;
  *
  * @author Marcel
  */
-public class ClientImpl extends UnicastRemoteObject implements Client  {
+public class ClientImpl extends UnicastRemoteObject implements Client {
 
     public String clientName;
     public MarketPlace servObj;
     private String servName;
     
-    private ArrayList<Item> wishedItems=new ArrayList<>();
+    
+    public ClientUI gui;
       
     
     
@@ -38,33 +40,36 @@ public class ClientImpl extends UnicastRemoteObject implements Client  {
         System.out.println("Connected to bank: " + this.servName);
     }
     
-    public void addItemToWished(Item it)throws RemoteException{
-        this.wishedItems.add(it);
-    }
+ 
     
     
     
     @Override
      public void notifyItemSold(Item it) throws RemoteException {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
+        this.gui.yourItemWasSold(it);
+     }
 
+    @Override
     public void notifyWishedAvailable(Item it)throws RemoteException {
-        throw new UnsupportedOperationException("Not supported yet.");
+        this.gui.whishAvailable(it);
+        
+    }
+
+   
+    
+     
+
+    @Override
+    public String getName() throws RemoteException {
+        return this.clientName;
     }
 
     @Override
-    public void removeItemFromWished(Item it) throws RemoteException {
-        this.wishedItems.remove(it);
-    }
-    
-    @Override
-    public ArrayList<Item> getWishedItems() throws RemoteException{
-        return this.wishedItems;
+    public void notifyWishDisappeared(Item it) {
+        this.gui.whishDisappeared(it);
     }
 
-    
-    
+      
     
 }
 
