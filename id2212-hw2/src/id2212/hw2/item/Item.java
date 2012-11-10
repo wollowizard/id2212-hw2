@@ -25,7 +25,6 @@ public class Item implements Serializable {
         this.price= p;
         this.seller=s;
         this.id = counter;
-        System.out.println("Item created: " + id);
         counter++;
     }
 

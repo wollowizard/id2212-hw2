@@ -8,7 +8,6 @@ import id2212.hw2.bank.Account;
 import id2212.hw2.bank.Bank;
 import id2212.hw2.bank.RejectedException;
 import id2212.hw2.client.Client;
-import id2212.hw2.client.ClientImpl;
 import id2212.hw2.item.Item;
 import java.rmi.Naming;
 import java.rmi.RemoteException;
@@ -16,8 +15,6 @@ import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *

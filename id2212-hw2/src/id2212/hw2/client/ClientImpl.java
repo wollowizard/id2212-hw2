@@ -10,7 +10,6 @@ import id2212.hw2.server.MarketPlace;
 import java.rmi.Naming;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
-import java.util.ArrayList;
 
 /**
  *
