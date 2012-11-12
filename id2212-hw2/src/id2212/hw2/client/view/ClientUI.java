@@ -33,6 +33,7 @@ public class ClientUI extends javax.swing.JFrame {
     private static final String WISH_FAIL = "Wish not done, something happend";
     private static final String SOLD = "Your item was sold";
     private static final String WISH_AVAILABLE = "A wish of yours is now available";
+    private static final String MONEY_ADD = "The money was added to your account";
     //private static final String CONNECTED = "Connected";
     private DefaultListModel listModel = new DefaultListModel();
     private DefaultListModel wishesModel = new DefaultListModel();
@@ -98,6 +99,11 @@ public class ClientUI extends javax.swing.JFrame {
         jPanel2 = new javax.swing.JPanel();
         jScrollPane3 = new javax.swing.JScrollPane();
         soldList = new javax.swing.JList();
+        txtMoney = new javax.swing.JTextField();
+        jLabel5 = new javax.swing.JLabel();
+        addMoney = new javax.swing.JButton();
+        jLabel6 = new javax.swing.JLabel();
+        totalMoney = new javax.swing.JLabel();
         jMenuBar1 = new javax.swing.JMenuBar();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -244,6 +250,18 @@ public class ClientUI extends javax.swing.JFrame {
 
         notificationTabbedPane.addTab("Sold", jPanel2);
 
+        jLabel5.setText("Money:");
+
+        addMoney.setText("ADD");
+        addMoney.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                addMoneyActionPerformed(evt);
+            }
+        });
+
+        jLabel6.setText("Account Balance:");
+
+        totalMoney.setText("0");
         setJMenuBar(jMenuBar1);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -259,7 +277,7 @@ public class ClientUI extends javax.swing.JFrame {
                                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(itemPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, Short.MAX_VALUE)
+                                .addGap(18, 52, Short.MAX_VALUE)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.TRAILING)
                                     .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -268,18 +286,30 @@ public class ClientUI extends javax.swing.JFrame {
                                     .addComponent(itemPrice, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(itemName, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE)))
                             .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                     .addGroup(layout.createSequentialGroup()
-                                        .addGap(11, 11, 11)
-                                        .addComponent(jLabel3)
+                                        .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(totalMoney))
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addGap(8, 8, 8)
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                            .addComponent(jLabel3)
+                                            .addComponent(jLabel5))
                                         .addGap(18, 18, 18)
-                                        .addComponent(nameTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                            .addComponent(txtMoney)
+                                            .addComponent(nameTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 98, Short.MAX_VALUE))
                                         .addGap(18, 18, 18)
-                                        .addComponent(connectButton)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(disconnectButton)))
-                                .addGap(0, 96, Short.MAX_VALUE)))
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                            .addGroup(layout.createSequentialGroup()
+                                                .addComponent(connectButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                .addComponent(disconnectButton))
+                                            .addComponent(addMoney, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addComponent(jLabel6)))
+                                .addGap(0, 0, Short.MAX_VALUE)))
                         .addGap(73, 73, 73)
                         .addComponent(notificationTabbedPane, javax.swing.GroupLayout.PREFERRED_SIZE, 198, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
@@ -293,31 +323,38 @@ public class ClientUI extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap(57, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(notificationTabbedPane)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(itemPrice, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel2))
-                        .addGap(70, 70, 70))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(notificationTabbedPane)
+                            .addComponent(nameTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel3)
+                            .addComponent(connectButton)
+                            .addComponent(disconnectButton))
+                        .addGap(4, 4, 4)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(txtMoney, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel5)
+                            .addComponent(addMoney)
+                            .addComponent(jLabel6))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(totalMoney))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(itemPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(jLabel1)
+                                    .addComponent(itemName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                    .addComponent(nameTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jLabel3)
-                                    .addComponent(connectButton)
-                                    .addComponent(disconnectButton))
-                                .addGap(31, 31, 31)
-                                .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(itemPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                        .addComponent(jLabel1)
-                                        .addComponent(itemName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)))
+                                    .addComponent(itemPrice, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabel2))
+                                .addGap(59, 59, 59)))))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(infoPannel, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(notificationLabel))
@@ -376,7 +413,7 @@ public class ClientUI extends javax.swing.JFrame {
         
         try {
             client.servObj.buyItem(it.getId(), client.clientName, client);
-            
+            this.totalMoney.setText(Float.toString(client.servObj.getBalance(client.getName())));
             infoPannel.setText(BUY_DONE);
             this.seeListButton.doClick();
         } catch (RejectedException | RemoteException ex) {
@@ -404,6 +441,7 @@ public class ClientUI extends javax.swing.JFrame {
         // TODO add your handling code here:
         if (itemName.getText().isEmpty() || itemPrice.getText().isEmpty()) {
             JOptionPane.showMessageDialog(this, "Fill the fields Item Name and Item Price first!");
+            return;
         }
         
         try {
@@ -427,6 +465,7 @@ public class ClientUI extends javax.swing.JFrame {
             // TODO add your handling code here:
             if (itemName.getText().isEmpty() || itemPrice.getText().isEmpty()) {
                 JOptionPane.showMessageDialog(this, "Fill the fields Item Name and Item Price first!");
+                return;
             }
             Item it = new Item(itemName.getText(), Float.parseFloat(itemPrice.getText()), null);
             
@@ -441,6 +480,11 @@ public class ClientUI extends javax.swing.JFrame {
     
     public void yourItemWasSold(Item it) {
         this.soldModel.addElement(it.getId() + " " + it.getName() + " " + it.getPrice() + "€");
+        try {
+            this.totalMoney.setText(Float.toString(client.servObj.getBalance(client.getName())));
+        } catch (RemoteException ex) {
+            Logger.getLogger(ClientUI.class.getName()).log(Level.SEVERE, null, ex);
+        }
         notificationCounter++;
         this.updateNotificationLabel();
         this.seeListButton.doClick();
@@ -464,7 +508,24 @@ public class ClientUI extends javax.swing.JFrame {
         this.updateNotificationLabel();
         this.pack();
     }//GEN-LAST:event_notificationLabelMouseClicked
+
+    private void addMoneyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addMoneyActionPerformed
+        // TODO add your handling code here:
+        if (txtMoney.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Fill the field with the number of money that you want to add");
+            return;
+        }
+        try {
+            client.servObj.addMoneyToAccount(client.getName(), Float.parseFloat(txtMoney.getText()));
+            this.totalMoney.setText(Float.toString(client.servObj.getBalance(client.getName())));
+            this.infoPannel.setText(MONEY_ADD);
+        } catch (RemoteException ex) {
+            Logger.getLogger(ClientUI.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_addMoneyActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton addMoney;
     private javax.swing.JButton buyButton;
     private javax.swing.JButton connectButton;
     private javax.swing.JButton disconnectButton;
@@ -476,6 +537,8 @@ public class ClientUI extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
@@ -489,6 +552,8 @@ public class ClientUI extends javax.swing.JFrame {
     private javax.swing.JButton seeListButton;
     private javax.swing.JButton sellButton;
     private javax.swing.JList soldList;
+    private javax.swing.JLabel totalMoney;
+    private javax.swing.JTextField txtMoney;
     private javax.swing.JButton wishButton;
     private javax.swing.JList wishesList;
     // End of variables declaration//GEN-END:variables

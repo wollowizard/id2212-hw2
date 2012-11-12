@@ -26,5 +26,6 @@ public interface MarketPlace extends Remote {
     public void wishItem(Item it, Client c) throws RemoteException;
 
     public Item newItem(String text, float parseFloat,Client c)throws RemoteException;
-    
+    public void addMoneyToAccount(String name, float money) throws RemoteException;
+    public float getBalance(String name) throws RemoteException;
 }

@@ -15,6 +15,8 @@ import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -156,5 +158,21 @@ public class MarketPlaceImpl extends UnicastRemoteObject implements MarketPlace 
     public Item newItem(String text, float parseFloat, Client client) throws RemoteException {
         return new Item(text, parseFloat, client);
 
+    }
+
+    @Override
+    public void addMoneyToAccount(String clientName, float money) throws RemoteException {
+        Account acc = listAccounts.get(clientName);
+        try {
+            acc.deposit(money);
+        } catch (RejectedException ex) {
+            Logger.getLogger(MarketPlaceImpl.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    @Override
+    public float getBalance(String name) throws RemoteException {
+        Account acc = listAccounts.get(name);
+        return acc.getBalance();
     }
 }
