@@ -7,7 +7,6 @@ package id2212.hw2.client;
 import id2212.hw2.item.Item;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
-import java.util.ArrayList;
 
 /**
  *
@@ -21,6 +20,12 @@ public interface Client extends Remote {
     
    public String getName() throws RemoteException;
 
-    public void notifyWishDisappeared(Item it)throws RemoteException;
+    public void notifyWishDisappeared(Integer itemId)throws RemoteException;
+
+    public void addWish(Item it)throws RemoteException;
+
+    public boolean hasNoMoreWishes()throws RemoteException;
+
+    
     
 }

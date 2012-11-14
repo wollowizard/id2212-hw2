@@ -12,16 +12,9 @@ import java.util.ArrayList;
  *
  * @author alfredo
  */
-public class Wish {
-    public Item item;
-    public Client wisher;
-
-    public Wish(Item item, Client wisher) {
-        this.item = item;
-        this.wisher=wisher;
-    }
-    
-    
+public class ClientWithWishes {
+    public Client client;
+    public ArrayList<Item> items=new ArrayList<>();
     
     
     

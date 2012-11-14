@@ -40,7 +40,7 @@ public class ClientUI extends javax.swing.JFrame {
     private DefaultListModel soldModel = new DefaultListModel();
     private Integer notificationCounter = 0;
     ArrayList<Item> items = new ArrayList<>();
-    private ArrayList<Item> wishesAvailable=new ArrayList<>();;
+    
 
     /**
      * Creates new form ClientUI
@@ -558,31 +558,18 @@ public class ClientUI extends javax.swing.JFrame {
     private javax.swing.JList wishesList;
     // End of variables declaration//GEN-END:variables
 
-    public void whishAvailable(Item it) {
-        this.wishesAvailable.add(it);
+    
+    public void updateWishes(ArrayList<Item> arr){
         this.wishesModel.clear();
-        for(Item i : wishesAvailable){
+        for(Item i : arr){
             this.wishesModel.addElement(i.getId() + " " + i.getName() + " " + i.getPrice() + "€");
         }
         notificationCounter++;
         this.updateNotificationLabel();
         this.seeListButton.doClick();
+    
     }
     
-    public void whishDisappeared(Item it) {
-        Item toremove=null;
-        for(Item i : this.wishesAvailable){
-            if(it.getId()==i.getId()){
-                toremove=i;
-            }
-        }
-        this.wishesAvailable.remove(toremove);
-        
-        this.wishesModel.clear();
-        for(Item i : wishesAvailable){
-            this.wishesModel.addElement(i.getId() + " " + i.getName() + " " + i.getPrice() + "€");
-        }
-    }
     
     private void updateNotificationLabel() {
         this.notificationLabel.setText("Notifications (" + this.notificationCounter + ") >>");

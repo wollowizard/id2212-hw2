@@ -27,9 +27,15 @@ public class MarketPlaceImpl extends UnicastRemoteObject implements MarketPlace 
     private String servName;
     private String bankName;
     private Bank objBank;
+    
     private Map<String, Account> listAccounts = new ConcurrentHashMap<String, Account>();
     private Map<Item, String> listItems = new ConcurrentHashMap<Item, String>();
+    
+    
+    
     private ArrayList<Wish> wishes = new ArrayList<>();
+    
+    private ArrayList<Client> clientsThatHaveWished = new ArrayList<>();
 
     public MarketPlaceImpl(String sname, String bname) throws RemoteException {
         super();
@@ -48,8 +54,6 @@ public class MarketPlaceImpl extends UnicastRemoteObject implements MarketPlace 
     public void registerClient(String name) throws RemoteException, RejectedException {
 
         listAccounts.put(name, this.objBank.newAccount(name));
-
-
 
     }
 
@@ -106,13 +110,19 @@ public class MarketPlaceImpl extends UnicastRemoteObject implements MarketPlace 
         sellAcc.deposit(it.getPrice());
         it.getSeller().notifyItemSold(it);
 
-        for(Wish w : wishes){
-            if(w.item.getId()==it.getId()){
-                w.wisher.notifyWishDisappeared(it);
+        ArrayList<Client> clientsToRemove = new ArrayList<>();
+        for(Client cl : clientsThatHaveWished){
+            
+            cl.notifyWishDisappeared(it.getId());
+            if(cl.hasNoMoreWishes()){
+                clientsToRemove.add(c);
             }
         }
-        //
         
+        for(Client cc : clientsToRemove){
+            clientsThatHaveWished.remove(cc);
+        }
+
         for (Map.Entry<Item, String> entry : listItems.entrySet()) {
             if (entry.getKey().getId() == it.getId()) {
                 listItems.remove(entry.getKey());
@@ -136,22 +146,40 @@ public class MarketPlaceImpl extends UnicastRemoteObject implements MarketPlace 
     @Override
     public void wishItem(Item it, Client c) throws RemoteException {
         this.wishes.add(new Wish(it, c));
+
     }
 
     private void checkForWishedItems(Item it) throws RemoteException {
 
+
+        ArrayList<Wish> tmp = new ArrayList<>();
         for (Wish w : wishes) {
             Client c = w.wisher;
+
             Item i = w.item;
 
             if ((i.getName().contains(it.getName()) || it.getName().contains(i.getName()))
                     && i.getPrice() <= it.getPrice()) {
-                c.notifyWishedAvailable(i);
-                w.item=it;
 
+                c.addWish(it);
+                c.notifyWishedAvailable(it);
+                
+                if(!clientsThatHaveWished.contains(c)){
+                    clientsThatHaveWished.add(c);
+                }
+                tmp.add(w);
             }
         }
-
+        for (Wish w : tmp) {
+            wishes.remove(w);
+        }
+        
+        /*System.out.println("current not real Wishes:");
+        
+         for (Wish w : wishes) {
+         System.out.println(w.item.getName() + w.item.getPrice() + w.wisher.getName());
+         }
+         */
     }
 
     @Override
